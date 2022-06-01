@@ -1,4 +1,3 @@
-
 %macro power_t_test(n, n_rep, seed, distribution, mu, sigma);
 
 data generate;
@@ -15,11 +14,11 @@ data generate;
 					x = x - mu_0; 
 				end;
 				if &distribution = "G" then do;
-					x = RAND('GAMMa', (&mu / &sigma) ** 2, &sigma **2 / &mu); 
+					x = 42*sqrt(2)*RAND('GAMMa', 0.5,1)+600-21*sqrt(2); 
 					x = x - mu_0; 
 				end;
 				if &distribution = "W" then do;
-					x = RAND('WEIBull', (&sigma / &mu) ** (-1.086), &mu / gamma(1 + 1 / ((&sigma / &mu) ** (-1.086)) ));
+					x = 21/sqrt(5)*RAND('WEIBull', 0.5,1)+600-42/sqrt(5);
 					x = x - mu_0; 
 				end;
 				if &distribution = "U" then do;
@@ -72,7 +71,6 @@ data pvalues;
 	rename fraction_crit_01_left= p_value_01  fraction_crit_05_left = p_value_05;
 	keep mu_0 fraction_crit_01_left fraction_crit_05_left;
 run;
-*ako ovo right legit ne trebam kasnije ih možda potpuno maknut da nas ne bune;
 
 proc print data = pvalues;
 run;
