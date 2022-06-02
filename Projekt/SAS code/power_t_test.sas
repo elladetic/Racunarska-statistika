@@ -1,6 +1,7 @@
 %macro power_t_test(n, n_rep, seed, distribution, mu, sigma, alpha);
 /*
 ---------------------------------------------------------------------
+INPUT
 n - size of sample
 n_reep - number of replications
 seed - seed for number generating
@@ -12,6 +13,12 @@ distribution - distribution label, possible values are: Normal_distribution - No
 mu - population mean
 sigma - population standard deviation
 alpha = statistical significance level
+
+---------------------------------------------------------------------
+OUTPUTS
+TABLE GENERATE - a table of generated data stored in the variable x
+TABLE FRACTIONS - a table of generated values for the critical area stored in the variable fraction_crit
+
 --------------------------------------------------------------------- 
 */
 
