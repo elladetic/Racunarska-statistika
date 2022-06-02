@@ -16,7 +16,7 @@ sigma - population standard deviation
 alpha = statistical significance level
 
 --------------------------------------------------------------------
-OUTPUTS
+OUTPUT
 TABLE GENERATE - a table of generated data stored in the variable x
 TABLE FRACTIONS - a table of generated values for the critical area stored in the variable fraction_crit
 				  and generated values for the pvalues stored in the variabe fraction_pvalue
