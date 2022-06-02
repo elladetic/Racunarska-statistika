@@ -1,4 +1,5 @@
-%macro power_t_test(n, n_rep, seed, distribution, mu, sigma);
+%macro power_t_test2(n, n_rep, seed, distribution, mu, sigma);
+
 /*
 ---------------------------------------------------------------------
 n - size of sample
@@ -18,8 +19,8 @@ sigma - population standard deviation
 data generate;
 	call streaminit(&seed);
 	do mu_0 = 500 to 700 by 20; 
-		do rep = 1 to &n_rep;
-			do i = 1 to &n;
+		do rep = 1 to &n_rep by 1;
+			do i = 1 to &n by 1;
 				if &distribution = "N" then do;
 					x = RAND("Normal", &mu, &sigma); 
 					x = x - mu_0; 
@@ -29,7 +30,7 @@ data generate;
 					x = x - mu_0; 
 				end;
 				if &distribution = "G" then do;
-					x = 42*sqrt(2)*RAND('GAMMa', 0.5,1)+600-21*sqrt(2); 
+					x = 42*sqrt(12) * RAND('GAMMa', 0.5, 1) + 600-21*sqrt(12); 
 					x = x - mu_0; 
 				end;
 				if &distribution = "W" then do;
@@ -46,45 +47,77 @@ data generate;
   		end;
   		output;
  	end;
- 	label rep = "Repetition";
 run;
 
+ods exclude all;
 
-proc means data=generate noprint;                                                                                              
-  	var x;                                                                                                         
-  	by mu_0 rep;  
-  	output out=t_all t=t; 
-run; 
-
-
-data t_all;
-	set t_all;
-	keep mu_0 rep t;
+proc ttest data = generate side = L alpha = 0.01;
+	var x;
+	by mu_0 rep; 
+	ods output ttests = ttValues_01(keep=tvalue probt mu_0 rep);
 run;
 
+ods exclude none;
 
-data tall;
-	set t_all;	
+data fraction_01;
+	set ttValues_01;	
 	
 	t_crit_01 = tinv(0.01, &n - 1);
-   	fraction_crit_01=(t le t_crit_01);
+   	fraction_crit_01 = (tvalue le t_crit_01);
+   	fraction_pvalue_01 = (probt le 0.01);
    	
-   	t_crit_05 = tinv (0.05, &n - 1);
-   	fraction_crit_05=(t le t_crit_05);
 run;
 
-proc means data=tall nway noprint; 
-	var fraction_crit_01 fraction_crit_05;
- 	output out=fractions mean=; 
+proc means data = fraction_01 nway noprint; 
+	var fraction_crit_01 fraction_pvalue_01;
+ 	output out = fractions_01 mean=; 
  	class mu_0;
 run;
 
+data fractions_01;
+	set fractions_01;
+	keep mu_0 fraction_crit_01 fraction_pvalue_01;
+run;
+
+
+ods exclude all;
+
+proc ttest data = generate side=L alpha = 0.05;
+	var x;
+	by mu_0 rep; 
+	ods output ttests = ttValues_05(keep=tvalue probt mu_0 rep);
+run;
+
+ods exclude none;
+
+data fraction_05;
+	set ttValues_05;	
+  
+   	t_crit_05 = tinv (0.05, &n - 1);
+   	fraction_crit_05 = (tvalue le t_crit_05);
+	fraction_pvalue_05 = (probt le 0.05);
+run;
+
+proc means data = fraction_05 nway noprint; 
+	var fraction_crit_05 fraction_pvalue_05;
+ 	output out = fractions_05 mean=; 
+ 	class mu_0;
+run;
+
+data fractions_05;
+	set fractions_05;
+	keep mu_0 fraction_crit_05 fraction_pvalue_05;
+run;
+
+
 data fractions;
-	set fractions;
-	keep mu_0 fraction_crit_01 fraction_crit_05;
+  	merge fractions_01 fractions_05;
+  	by mu_0;
 run;
 
 proc print data = fractions;
 run;
 
-%mend power_t_test;
+%mend;
+
+

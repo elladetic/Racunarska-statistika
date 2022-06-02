@@ -1,17 +1,20 @@
 libname lib "/home/u58223001/RS PROJEKT";
 %include "/home/u58223001/RS PROJEKT/power_t_test.sas";
+%include "/home/u58223001/RS PROJEKT/power_t_test2.sas";
 
 %let seed = 15;
-%let n_rep = 500;
+%let n_rep = 200;
 %let mu = 600;
 %let sigma = 42;
+%let n = 2;
 
 *****************************************************************************************************;
 title1 "Normalna distribucija";
 %let distribution = "N";
 
 title2 height=7pt "Veličina uzorka  je 10" ;
-%power_t_test(10, &n_rep, &seed, &distribution, &mu, &sigma); 
+%power_t_test(&n, &n_rep, &seed, &distribution, &mu, &sigma); 
+%power_t_test2(&n, &n_rep, &seed, &distribution, &mu, &sigma); 
 
 title2 height=7pt "Veličina uzorka  je 15";
 %power_t_test(15, &n_rep, &seed, &distribution, &mu, &sigma);
