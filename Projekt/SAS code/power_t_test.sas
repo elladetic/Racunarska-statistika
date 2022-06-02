@@ -5,11 +5,11 @@ INPUT
 n - size of sample
 n_reep - number of replications
 seed - seed for number generating
-distribution - distribution label, possible values are: Normal_distribution - Normal Distribution
-                                                        Laplace_distribution - Laplace Distribution
-                                                        Gamma_distributio - Gamma Distribution
-                                                        Weibull_distribution - Weibull Distribution
-                                                        Uniform_distribution - Uniform Distribution
+distribution - distribution label, possible values are: "N" - Normal Distribution
+                                                        "L" - Laplace Distribution
+                                                        "G" - Gamma Distribution
+                                                        "W" - Weibull Distribution
+                                                        "U" - Uniform Distribution
 mu - population mean
 sigma - population standard deviation
 alpha = statistical significance level
