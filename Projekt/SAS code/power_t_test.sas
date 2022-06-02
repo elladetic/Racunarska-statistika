@@ -1,17 +1,17 @@
-%macro power_t_test(n, n_rep, seed, distribution, mu, sigma);
+%macro power_t_test(n, n_rep, seed, distribution, mu, sigma, alpha);
 /*
 ---------------------------------------------------------------------
 n - size of sample
 n_reep - number of replications
 seed - seed for number generating
-distribution - distribution label, possible values are: "N" - Normal Distribution
-                                                        "L" - Laplace Distribution
-                                                        "G" - Gamma Distribution
-                                                        "W" - Weibull Distribution
-                                                        "U" - Uniform Distribution
+distribution - distribution label, possible values are: Normal_distribution - Normal Distribution
+                                                        Laplace_distribution - Laplace Distribution
+                                                        Gamma_distributio - Gamma Distribution
+                                                        Weibull_distribution - Weibull Distribution
+                                                        Uniform_distribution - Uniform Distribution
 mu - population mean
 sigma - population standard deviation
-
+alpha = statistical significance level
 --------------------------------------------------------------------- 
 */
 
@@ -28,7 +28,7 @@ data generate;
 					x = RAND('LAPLace', &mu, &sigma / sqrt(2)); 
 					x = x - mu_0; 
 				end;
-				if &distribution = "G" then do;
+				if &distribution ="G" then do;
 					x = 42*sqrt(2)*RAND('GAMMa', 0.5,1)+600-21*sqrt(2); 
 					x = x - mu_0; 
 				end;
@@ -66,25 +66,24 @@ run;
 data tall;
 	set t_all;	
 	
-	t_crit_01 = tinv(0.01, &n - 1);
-   	fraction_crit_01=(t le t_crit_01);
+	t_crit = tinv(&alpha, &n - 1);
+   	fraction_crit = (t le t_crit);
    	
-   	t_crit_05 = tinv (0.05, &n - 1);
-   	fraction_crit_05=(t le t_crit_05);
 run;
 
 proc means data=tall nway noprint; 
-	var fraction_crit_01 fraction_crit_05;
+	var fraction_crit;
  	output out=fractions mean=; 
  	class mu_0;
 run;
 
+
 data fractions;
 	set fractions;
-	keep mu_0 fraction_crit_01 fraction_crit_05;
+	distribution = &distribution;
+	n = &n;
+	keep mu_0 fraction_crit distribution n;	
 run;
 
-proc print data = fractions;
-run;
 
 %mend power_t_test;

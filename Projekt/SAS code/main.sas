@@ -6,16 +6,14 @@ libname lib "/home/u58223001/RS PROJEKT";
 %let n_rep = 200;
 %let mu = 600;
 %let sigma = 42;
-%let n = 2;
+%let n = 10;
 
 *****************************************************************************************************;
 title1 "Normalna distribucija";
 %let distribution = "N";
 
 title2 height=7pt "Veličina uzorka  je 10" ;
-%power_t_test(&n, &n_rep, &seed, &distribution, &mu, &sigma); 
-%power_t_test2(&n, &n_rep, &seed, &distribution, &mu, &sigma); 
-
+%power_t_test(&n, &n_rep, &seed, &distribution, &mu, &sigma);
 title2 height=7pt "Veličina uzorka  je 15";
 %power_t_test(15, &n_rep, &seed, &distribution, &mu, &sigma);
 
