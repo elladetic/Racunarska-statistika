@@ -16,7 +16,7 @@ sigma - population standard deviation
 alpha = statistical significance level
 
 --------------------------------------------------------------------
-OUTPUT
+OUTPUTS
 TABLE GENERATE - a table of generated data stored in the variable x
 TABLE FRACTIONS - a table of generated values for the critical area stored in the variable fraction_crit
 				  and generated values for the pvalues stored in the variabe fraction_pvalue
@@ -71,7 +71,7 @@ ods exclude none;
 data fraction;
 	set ttValues;	
 	t_crit = tinv(&alpha, &n - 1);
-   	fraction_crit = (tvalue le t_crit_01);
+   	fraction_crit = (tvalue le t_crit);
    	fraction_pvalue = (probt le &alpha);
    	
 run;
@@ -84,11 +84,11 @@ run;
 
 data fractions;
 	set fractions;
-	keep mu_0 fraction_crit fraction_pvalue;
+	distribution = &distribution;
+	n = &n; 
+	keep mu_0 fraction_crit fraction_pvalue distribution n;
 run;
 
-proc print data = fractions;
-run;
 
 %mend;
 
