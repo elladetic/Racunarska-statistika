@@ -75,7 +75,7 @@ run;
 data sums; 
 	set generate;
 	h = 0.5;
-	x_ = x / ((x <= &h)*2*x/&h + (x>&h) * 2*(1-x)/(1-&h)); *f(x)=x;
+	x = x / ((x <= &h)*2*x/&h + (x>&h) * 2*(1-x)/(1-&h)); *f(x)=x;
 run; 
 
 data cumulative_sums;
